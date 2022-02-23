@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('apartments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('slug');
             $table->decimal('price', 16, 2);
             $table->string('currency', 3);
             $table->text('description')->nullable();

@@ -9,7 +9,6 @@ class Apartment extends Model
 {
     use HasFactory;
 
-
     /**
      * The attributes that are mass assignable.
      *
@@ -23,6 +22,9 @@ class Apartment extends Model
         'category_id',
     ];
 
+    /**
+     * Get the category that owns the apartment.
+     */
     public function category()
     {
         return $this->belongsTo(Category::class);
