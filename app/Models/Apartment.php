@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Apartment extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -20,9 +20,19 @@ class Apartment extends Model
         'price',
         'currency',
         'description',
+        'properties',
         'category_id',
-    ];
+    ]; 
 
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'properties' => 'array',
+    ];
 
     /**
      * Get the indexable data array for the model.
@@ -47,4 +57,11 @@ class Apartment extends Model
         return $this->belongsTo(Category::class);
     }
 
+    public function scopeSearch($query, $searchTerm) {
+        return $query
+            ->where('name', 'like', "%" . $searchTerm . "%")
+            ->orWhere('price', $searchTerm)
+            ->orWhere('description', 'like', "%" . $searchTerm . "%")
+            ->orWhere('category_id', $searchTerm);
+    }
 }

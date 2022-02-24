@@ -22,6 +22,10 @@ class ApartmentFactory extends Factory
             'price' => $this->faker->randomNumber(2),
             'currency' => $this->faker->currencyCode(),
             'description' => $this->faker->paragraph(),
+            'properties'    =>  [
+                'balcon_size'   =>  $this->faker->numberBetween(2,8),
+                'location'  =>  $this->faker->city(),
+            ],
             'category_id' => Category::factory(),
         ];
     }

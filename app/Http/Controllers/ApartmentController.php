@@ -6,6 +6,7 @@ use App\Models\Apartment;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreApartmentRequest;
 use App\Http\Requests\UpdateApartmentRequest;
+use App\Http\Resources\ApartmentResource;
 
 class ApartmentController extends Controller
 {
@@ -16,8 +17,22 @@ class ApartmentController extends Controller
      */
     public function index(Request $request)
     {
-        $apartments = Apartment::search($request->s)->paginate(20);
-        return $apartments;
+        $validated = $request->validate([
+            's' =>  'nullable|string',
+            'properties'    =>  'nullable',
+            'orderBy' => 'nullable|array',
+            'orderBy.*' => 'in:asc,desc',
+        ]);
+
+        $apartments = Apartment::search($request->s)
+        ->when($request->orderBy, function ($query, $orderBy) {
+            foreach($orderBy ?? [] as $key => $value) {
+                $query->orderBy($key, $value);
+            }
+        })
+        ->paginate(20);
+
+        return ApartmentResource::collection($apartments);
     }
 
     /**
@@ -28,6 +43,7 @@ class ApartmentController extends Controller
      */
     public function store(StoreApartmentRequest $request) {
         $apartment = Apartment::create($request->validated());
+
         return $apartment;
     }
 
