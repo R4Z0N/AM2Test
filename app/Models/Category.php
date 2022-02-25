@@ -15,8 +15,20 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
+        'parent_id',
         'name'
     ];
+
+
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
 
 
     /**
