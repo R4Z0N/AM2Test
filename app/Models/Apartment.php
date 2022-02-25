@@ -57,11 +57,22 @@ class Apartment extends Model
         return $this->belongsTo(Category::class);
     }
 
+
     public function scopeSearch($query, $searchTerm) {
         return $query
             ->where('name', 'like', "%" . $searchTerm . "%")
             ->orWhere('price', $searchTerm)
             ->orWhere('description', 'like', "%" . $searchTerm . "%")
             ->orWhere('category_id', $searchTerm);
+    }
+
+    public function rating() {
+        return $this->hasMany(ApartmantRating::class);
+    }
+
+    public function updateRating()
+    {
+        $this->rating = $this->rating()->avg('rating');
+        $this->save();
     }
 }

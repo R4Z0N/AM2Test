@@ -13,7 +13,8 @@ class ApartmentController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param  Illuminate\Http\Request  $request
+     * @return App\Http\Resources\ApartmentResource
      */
     public function index(Request $request)
     {
@@ -39,12 +40,12 @@ class ApartmentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreApartmentRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return App\Http\Resources\ApartmentResource
      */
     public function store(StoreApartmentRequest $request) {
         $apartment = Apartment::create($request->validated());
 
-        return $apartment;
+        return new ApartmentResource($apartment);
     }
 
     /**
@@ -69,6 +70,46 @@ class ApartmentController extends Controller
     {
         $apartment->update($request->validated());
         return $apartment;
+    }
+
+    /**
+     * Rating apartment
+     *
+     * @param  Illuminate\Http\Request  $request
+     * @param  \App\Models\Apartment  $apartment
+     * @return App\Http\Resources\ApartmentResource
+     */
+    public function rating(Request $request, Apartment $apartment)
+    {
+        $validated = $request->validate([
+            'rating' =>  'required|numeric|between:1,5',
+        ]);
+
+        $rating = $apartment->rating()->firstWhere('email', $request->user_email);
+
+        if($rating)
+            return (new ApartmentResource($apartment))
+                ->additional([
+                    'message' => 'You have already rated this apartment.'
+                ])
+                ->response()
+                ->setStatusCode(\Illuminate\Http\Response::HTTP_CONFLICT);
+
+        $rating = $apartment->rating()->create([
+            'email' =>  $request->user_email,
+            'rating'    =>  $request->rating
+        ]);
+
+        $apartment->updateRating();
+
+        return (new ApartmentResource($apartment))
+            ->additional([
+                'message' => 'You have successfully rated the apartment.'
+            ])
+            ->response()
+            ->setStatusCode(\Illuminate\Http\Response::HTTP_CREATED);
+
+        return new ApartmentResource($apartment);
     }
 
     /**
