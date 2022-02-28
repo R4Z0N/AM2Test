@@ -18,4 +18,9 @@ class ApartmantRating extends Model
         'email',
         'rating',
     ]; 
+
+    public function apartment()
+    {
+        return $this->belongsTo(Apartment::class);
+    }
 }

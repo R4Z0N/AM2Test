@@ -34,6 +34,13 @@ class ApartmentResource extends JsonResource
                 }
                 return $properties;
             }),
+            $this->mergeWhen($request->fields, function () use ($request) {
+                $fields = [];
+                foreach($request->fields ?? [] as $key => $value) {
+                    $fields['fields'][$key] = $this->fields->where('key', $key)->first()->value;
+                }
+                return $fields;
+            }),
             'category_id'   =>  $this->category_id,
             'rating'    =>  $this->rating,
             'created_at'    =>  $this->created_at,

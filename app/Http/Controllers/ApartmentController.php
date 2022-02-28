@@ -28,6 +28,8 @@ class ApartmentController extends Controller
             'orderBy' => 'nullable|array',
             'orderBy.*' => 'in:asc,desc',
             'category_id' => ['nullable', 'integer', 'exists:App\Models\Category,id'],
+            'fields' => 'nullable|array',
+            'fields.*' => 'string',
         ]);
 
         $apartments = Apartment::search($request->s)
@@ -35,6 +37,14 @@ class ApartmentController extends Controller
             $query->whereHas('category', function ($query) use ($category_id) {
                 $query->where('id', $category_id)->orWhere('parent_id', $category_id);
             });
+        })
+        ->when($request->fields, function ($query, $fields) {
+            $query->with('fields');
+            foreach($fields ?? [] as $key => $value) {
+                $query->whereHas('fields', function ($query) use ($key, $value) {
+                    $query->where('key', $key)->where('value', $value);
+                });
+            }
         })
         ->when($request->orderBy, function ($query, $orderBy) {
             foreach($orderBy ?? [] as $key => $value) {

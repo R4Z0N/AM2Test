@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ApartmentSubscriber extends Model
+class ApartmentField extends Model
 {
     use HasFactory;
 
@@ -15,10 +15,9 @@ class ApartmentSubscriber extends Model
      * @var array
      */
     protected $fillable = [
-        'email',
-        'price',
+        'key',
+        'value',
     ]; 
-
 
     public function apartment()
     {

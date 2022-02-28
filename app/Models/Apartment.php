@@ -70,7 +70,8 @@ class Apartment extends Model
         ->orWhere('category_id', $searchTerm);
     }
 
-    public function ratings() {
+    public function ratings() 
+    {
         return $this->hasMany(ApartmantRating::class);
     }
 
@@ -81,8 +82,14 @@ class Apartment extends Model
     }
 
 
-    public function subscribers() {
+    public function subscribers() 
+    {
         return $this->hasMany(ApartmentSubscriber::class);
+    }
+
+    public function fields() 
+    {
+        return $this->hasMany(ApartmentField::class);
     }
 
     /**
