@@ -3,6 +3,11 @@
 namespace App\Observers;
 
 use App\Models\Apartment;
+use App\Events\ApartmentUpdated;
+
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ApartmentUpdateSubscribersMail;
+
 
 class ApartmentObserver
 {
@@ -36,7 +41,7 @@ class ApartmentObserver
      */
     public function updated(Apartment $apartment)
     {
-        //
+        event(new ApartmentUpdated($apartment));
     }
 
     /**

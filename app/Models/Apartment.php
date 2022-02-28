@@ -57,7 +57,7 @@ class Apartment extends Model
      */
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->hasManyThrough(Category::class, Category::class);
     }
 
 
@@ -69,16 +69,20 @@ class Apartment extends Model
         ->orWhere('category_id', $searchTerm);
     }
 
-    public function rating() {
+    public function ratings() {
         return $this->hasMany(ApartmantRating::class);
     }
 
     public function updateRating()
     {
-        $this->rating = $this->rating()->avg('rating');
+        $this->rating = $this->ratings()->avg('rating');
         $this->save();
     }
 
+
+    public function subscribers() {
+        return $this->hasMany(ApartmentSubscriber::class);
+    }
 
     /**
      * Get the apartment's price.

@@ -8,6 +8,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 use App\Models\Apartment;
 use App\Observers\ApartmentObserver;
+use App\Events\ApartmentUpdated;
+use App\Listeners\SendEmailApartmentSubscribers;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        ApartmentUpdated::class => [
+            SendEmailApartmentSubscribers::class,
         ],
     ];
 

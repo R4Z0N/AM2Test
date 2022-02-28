@@ -33,4 +33,5 @@ Route::apiResource('categories', CategoryController::class);
 Route::apiResource('apartments', ApartmentController::class);
 Route::controller(ApartmentController::class)->group(function () {
     Route::post('apartments/{apartment}/rating', 'rating')->middleware('apiToken');
+    Route::post('apartments/{apartment}/subscribe', 'subscribe')->middleware('apiToken');
 });
