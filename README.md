@@ -20,6 +20,12 @@ Nakon sto se uredno podesi projekat potrebno je pozvati migracije i seedere.
 php artisan migrate --seed
 ```
 
+## Poslovi
+Za izvrsavanje poslova kao sto je slanje mailova za cijenu ispod x vrednosti potrebno je pozvati komadu za obradu poslova ili QUEUE_CONNECTION podesiti na SYNC, u slucaju da se podesi SYNC poslovi ce se izvrsiti sa obradom request-a
+```
+php artisan queue:work
+```
+
 ## End pointi
 ```
 php artisan route:list
