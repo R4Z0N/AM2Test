@@ -33,7 +33,7 @@ class ApartmentController extends Controller
         $apartments = Apartment::search($request->s)
         ->when($request->category_id, function ($query, $category_id) {
             $query->whereHas('category', function ($query) use ($category_id) {
-                $query->where('id', $category_id);
+                $query->where('id', $category_id)->orWhere('parent_id', $category_id);
             });
         })
         ->when($request->orderBy, function ($query, $orderBy) {

@@ -57,7 +57,8 @@ class Apartment extends Model
      */
     public function category()
     {
-        return $this->hasManyThrough(Category::class, Category::class);
+        return $this->belongsTo(Category::class);
+        // return $this->hasManyThrough(Category::class, Category::class);
     }
 
 

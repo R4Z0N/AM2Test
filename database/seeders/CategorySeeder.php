@@ -20,5 +20,8 @@ class CategorySeeder extends Seeder
     public function run()
     {
         Category::factory(4)->has(Apartment::factory()->count(6))->create();
+        Category::factory([
+            'parent_id' =>  1,
+        ])->has(Apartment::factory()->count(6))->create();
     }
 }
